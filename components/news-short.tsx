@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
   Bookmark,
@@ -42,14 +42,54 @@ export function NewsShort({ item, previousId, nextId }: NewsShortProps) {
 }
 
 export function NewsReel({ items }: { items: PublicNewsItem[] }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const touchStartY = useRef<number | null>(null);
+  const wheelLocked = useRef(false);
+
+  function goTo(index: number) {
+    setActiveIndex(Math.max(0, Math.min(items.length - 1, index)));
+  }
+
+  function handleSwipe(deltaY: number) {
+    if (Math.abs(deltaY) < 42) return;
+    if (deltaY > 0) goTo(activeIndex + 1);
+    else goTo(activeIndex - 1);
+  }
+
   return (
     <ReaderFrame>
-      <div className="reel" aria-label="News reel">
-        {items.map((item, index) => (
-          <section className="reel-item" key={item.id}>
-            <Story item={item} priority={index === 0} />
-          </section>
-        ))}
+      <div
+        className="reel"
+        aria-label="News reel"
+        onTouchStart={(event) => {
+          touchStartY.current = event.touches[0]?.clientY ?? null;
+        }}
+        onTouchEnd={(event) => {
+          if (touchStartY.current === null) return;
+          const endY = event.changedTouches[0]?.clientY ?? touchStartY.current;
+          handleSwipe(touchStartY.current - endY);
+          touchStartY.current = null;
+        }}
+        onWheel={(event) => {
+          if (wheelLocked.current) return;
+          if (Math.abs(event.deltaY) < 35) return;
+          wheelLocked.current = true;
+          handleSwipe(event.deltaY);
+          window.setTimeout(() => {
+            wheelLocked.current = false;
+          }, 520);
+        }}
+      >
+        <div className="reel-track" style={{ transform: `translate3d(0, -${activeIndex * 100}svh, 0)` }}>
+          {items.map((item, index) => (
+            <section className="reel-item" key={item.id}>
+              <Story item={item} priority={index === 0} />
+            </section>
+          ))}
+        </div>
+        <div className="reel-count">
+          {toBanglaDigits(activeIndex + 1)} / {toBanglaDigits(items.length)}
+        </div>
       </div>
     </ReaderFrame>
   );
@@ -106,7 +146,6 @@ function Story({
   const [saved, setSaved] = useState(false);
   const [showSave, setShowSave] = useState(false);
   const [toast, setToast] = useState("");
-  // const bodyParagraphs = useMemo(() => splitSummary(item.summary), [item.summary]);
   const publishedTime = formatRelativeTime(item.publishedAt);
 
   useEffect(() => {
