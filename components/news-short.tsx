@@ -47,7 +47,7 @@ export function NewsReel({ items }: { items: PublicNewsItem[] }) {
       <div className="reel" aria-label="News reel">
         {items.map((item, index) => (
           <section className="reel-item" key={item.id}>
-            <Story item={item} priority={index === 0} compact />
+            <Story item={item} priority={index === 0} />
           </section>
         ))}
       </div>
@@ -96,19 +96,17 @@ function ThemeContextButton({
 function Story({
   item,
   showBack = false,
-  priority = true,
-  compact = false
+  priority = true
 }: {
   item: PublicNewsItem;
   showBack?: boolean;
   priority?: boolean;
-  compact?: boolean;
 }) {
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
   const [showSave, setShowSave] = useState(false);
   const [toast, setToast] = useState("");
-  const bodyParagraphs = useMemo(() => splitSummary(item.summary), [item.summary]);
+  // const bodyParagraphs = useMemo(() => splitSummary(item.summary), [item.summary]);
   const publishedTime = formatRelativeTime(item.publishedAt);
 
   useEffect(() => {
@@ -153,7 +151,7 @@ function Story({
   }
 
   return (
-    <div className={`story${compact ? " story-compact" : ""}`}>
+    <div className="story">
       <div className="scr">
         <div className="hero">
           {item.imageUrl ? (
@@ -232,16 +230,12 @@ function Story({
             <p>{item.summary}</p>
           </div>
 
-          {!compact ? (
-            <>
-              <h3 className="sec-h">বিস্তারিত</h3>
-              {bodyParagraphs.map((paragraph) => (
-                <p className="para" key={paragraph}>
-                  {paragraph}
-                </p>
-              ))}
-            </>
-          ) : null}
+          {/* <h3 className="sec-h">বিস্তারিত</h3>
+          {bodyParagraphs.map((paragraph) => (
+            <p className="para" key={paragraph}>
+              {paragraph}
+            </p>
+          ))} */}
 
           <div className="srcbox">
             <span className="l">

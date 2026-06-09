@@ -28,10 +28,9 @@ button, input, select, textarea { font:inherit; }
 .story{ position:relative; height:100svh; overflow:hidden; background:var(--bg); }
 .scr{ height:100svh; overflow-y:auto; scroll-behavior:smooth; overscroll-behavior:contain; }
 .scr::-webkit-scrollbar{ width:0; }
-.story-compact .scr{ overflow:hidden; touch-action:pan-y; }
-.reel{ height:100svh; overflow-y:auto; scroll-snap-type:y mandatory; scroll-behavior:smooth; overscroll-behavior-y:contain; -webkit-overflow-scrolling:touch; }
+.reel{ height:100svh; overflow-y:auto; scroll-snap-type:y mandatory; scroll-behavior:smooth; overscroll-behavior-y:contain; }
 .reel::-webkit-scrollbar{ width:0; }
-.reel-item{ height:100svh; scroll-snap-align:start; scroll-snap-stop:always; position:relative; overflow:hidden; }
+.reel-item{ min-height:100svh; scroll-snap-align:start; scroll-snap-stop:always; position:relative; }
 .theme-float{ position:absolute; top:16px; left:50%; transform:translateX(-50%); z-index:20; width:42px; height:42px; border-radius:50%; border:none;
   background:rgba(255,255,255,.92); color:#1E1813; display:grid; place-items:center; box-shadow:0 6px 16px -6px rgba(0,0,0,.4); }
 .ek-root[data-theme="dark"] .theme-float{ background:rgba(40,33,28,.92); color:#F3ECE4; }
@@ -70,11 +69,6 @@ button, input, select, textarea { font:inherit; }
 .mini.on{ color:var(--primary); background:var(--primary-soft); border-color:transparent; }
 
 .body{ padding:22px 22px 60px; }
-.story-compact .body{ padding-bottom:22px; }
-.story-compact .hero{ height:38svh; min-height:230px; }
-.story-compact .short{ margin-bottom:16px; }
-.story-compact .short p{ display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden; }
-.story-compact .srcbox{ margin-top:0; }
 .short{ background:var(--primary-soft); border-radius:16px; padding:16px 17px 17px; position:relative; margin-bottom:26px;
   border:1px solid var(--line); }
 .short-lab{ display:inline-flex; align-items:center; gap:6px; font-family:var(--ui); font-size:11px; font-weight:700;
