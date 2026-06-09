@@ -47,7 +47,7 @@ export function NewsReel({ items }: { items: PublicNewsItem[] }) {
       <div className="reel" aria-label="News reel">
         {items.map((item, index) => (
           <section className="reel-item" key={item.id}>
-            <Story item={item} priority={index === 0} />
+            <Story item={item} priority={index === 0} compact />
           </section>
         ))}
       </div>
@@ -96,11 +96,13 @@ function ThemeContextButton({
 function Story({
   item,
   showBack = false,
-  priority = true
+  priority = true,
+  compact = false
 }: {
   item: PublicNewsItem;
   showBack?: boolean;
   priority?: boolean;
+  compact?: boolean;
 }) {
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -151,7 +153,7 @@ function Story({
   }
 
   return (
-    <div className="story">
+    <div className={`story${compact ? " story-compact" : ""}`}>
       <div className="scr">
         <div className="hero">
           {item.imageUrl ? (
@@ -230,12 +232,16 @@ function Story({
             <p>{item.summary}</p>
           </div>
 
-          <h3 className="sec-h">বিস্তারিত</h3>
-          {bodyParagraphs.map((paragraph) => (
-            <p className="para" key={paragraph}>
-              {paragraph}
-            </p>
-          ))}
+          {!compact ? (
+            <>
+              <h3 className="sec-h">বিস্তারিত</h3>
+              {bodyParagraphs.map((paragraph) => (
+                <p className="para" key={paragraph}>
+                  {paragraph}
+                </p>
+              ))}
+            </>
+          ) : null}
 
           <div className="srcbox">
             <span className="l">
